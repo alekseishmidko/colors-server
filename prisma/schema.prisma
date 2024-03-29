@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(cuid())
+  email    String @unique
+  name     String
+  password String
+
+  palette Palette[]
+
+  @@map("user")
+}
+
+model Palette {
+  id     String  @id @default(cuid())
+  name   String
+  user   User    @relation(fields: [userId], references: [id])
+  userId String  @map("user_id")
+  color  Color[]
+
+  @@map("palette")
+}
+
+model Color {
+  id        String  @id @default(cuid())
+  name      String
+  hex       String
+  palette   Palette @relation(fields: [paletteId], references: [id])
+  paletteId String  @map("palette_id")
+}
