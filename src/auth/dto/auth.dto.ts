@@ -7,7 +7,7 @@ export class AuthDto {
   @MinLength(2, {
     message: 'name`s length should be more then 2 symbols',
   })
-  @IsEmail()
+  @IsString()
   name: string;
 
   @MinLength(6, {
