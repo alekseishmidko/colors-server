@@ -23,7 +23,7 @@ model Palette {
   name   String
   user   User    @relation(fields: [userId], references: [id])
   userId String  @map("user_id")
-  color  Color[]
+  color  Color[] 
 
   @@map("palette")
 }
@@ -32,6 +32,6 @@ model Color {
   id        String  @id @default(cuid())
   name      String
   hex       String
-  palette   Palette @relation(fields: [paletteId], references: [id])
-  paletteId String  @map("palette_id")
+  palette   Palette @relation(fields: [paletteId], references: [id], onDelete: Cascade ) 
+  paletteId String  @map("palette_id") 
 }

@@ -5,8 +5,6 @@ import { PaletteDto } from './dto/palette.dto';
 export class PaletteService {
   constructor(private prisma: PrismaService) {}
 
-  //   async isPermit() {}
-
   getById(id: string, userId: string) {
     return this.prisma.palette.findUnique({
       where: { id, userId },
@@ -28,7 +26,6 @@ export class PaletteService {
   }
 
   async edit(dto: PaletteDto, userId: string, id: string) {
-    console.log('sscs');
     return this.prisma.palette.update({
       where: { id, userId },
       data: { name: dto.name },
@@ -36,8 +33,13 @@ export class PaletteService {
   }
 
   async delete(id: string, userId: string) {
-    return this.prisma.palette.delete({
-      where: { id, userId },
-    });
+    return this.prisma.$transaction([
+      this.prisma.color.deleteMany({
+        where: { paletteId: id },
+      }),
+      this.prisma.palette.delete({
+        where: { id, userId },
+      }),
+    ]);
   }
 }
