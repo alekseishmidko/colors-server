@@ -83,7 +83,12 @@ export class ColorsService {
     if (!permit) throw new ForbiddenException('Forbidden operation');
     return this.prisma.color.update({
       where: { id, paletteId },
-      data: { hex: this.transformHex(dto.hex), name: dto.name },
+      data: {
+        hex: this.transformHex(dto.hex),
+        name:
+          dto?.name ||
+          (await this.determineColorName(this.transformHex(dto.hex))),
+      },
     });
   }
 }
